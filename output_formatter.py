@@ -2,8 +2,8 @@ import re
 
 class OutputFormatter:
     def _strip_comments(self, code: str) -> str:
-        code = re.sub(r'/\*.*?\*/', '', code)
-        code = re.sub(r'(//|#).*?$', '', code)
+        code = re.sub(r'/\*.*?\*/', '', code, flags=re.DOTALL)
+        code = re.sub(r'(//|#).*?$', '', code, flags=re.MULTILINE)
         return re.sub(r'\n\s*\n', '\n', code)
 
 
@@ -17,7 +17,7 @@ class OutputFormatter:
         cleaned = re.sub(r'\n```$', '', cleaned)
         cleaned = re.sub(r'```$', '', cleaned)
 
-        # Extract pure code
+        # Remove conversational filler and extract pure code
         if '```' in cleaned:
             match = re.search(r'```[a-zA-Z]*\n(.*?)```', cleaned, re.DOTALL)
             if match:

@@ -1,18 +1,25 @@
 import os
-from pygments.lexers import guess_lexer
+from pygments.lexers import guess_lexer, get_lexer_for_filename
 from pygments.token import Token
+
+def programming_language_of(filepath: str, source_code: str):
+    _, ext = os.path.splitext(filepath)
+    if ext.lower() == '.txt':
+        return guess_lexer(source_code)
+    else:
+        return get_lexer_for_filename(filepath)
 
 
 class InputCleaner:
     def clean(self, filepath: str, source_code: str) -> str:
         try:
-            lexer = guess_lexer(filepath, source_code)
+            lexer = programming_language_of(filepath, source_code)
             tokens = lexer.get_tokens(source_code)
 
             cleaned_code = ""
             for token_type, value in tokens:
-                # Remove any comment
-                if token_type in Token.Comment:
+                # Remove any comment or any docstring
+                if token_type in Token.Comment or token_type in Token.Literal.String.Doc:
                     continue
 
                 cleaned_code += value
@@ -25,7 +32,7 @@ class InputCleaner:
 class FunctionValidator:
     def has_function(self, filepath: str, source_code: str) -> bool:
         try:
-            lexer = guess_lexer(filepath, source_code)
+            lexer = programming_language_of(filepath, source_code)
             tokens = lexer.get_tokens(source_code)
 
             # Search for a function
