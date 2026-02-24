@@ -3,11 +3,11 @@
 
 To make the application works perfectly, the system must follow strict steps for Processing. Here is my strategy:
 
-- 1. **Parse input**: First step, the app will read the file from the command line argument that the user give it.
+- **1. Parse input**: First step, the app will read the file from the command line argument that the user give it.
 - **2. Validate presence of a function:** I use a library called Pygments to lex the code and check if there is a function.
 - **3. Remove any Comments or docstrings:** then I use Pygments to remove all the comments and docstring to avoid prompt injection
-- 4. Send request to LLM API: After the code is clean, I send request to LLM API. I chose the Google Gemini model.
-- 5. Constrain model with a system prompt: I write a very strict system prompt telling the AI to only write code.
+- **4. Send request to LLM API:** After the code is clean, I send request to LLM API. I chose the Google Gemini model.
+- **5. Constrain model with a system prompt:** I write a very strict system prompt telling the AI to only write code.
 - **6. Enforce deterministic output:** I used LangChain structured output with Pydantic to force the format. The Output must return tests only: no explanation, no markdown, no commentary, and no extra text.
 - **7. second firewall:**  I also added a second Regex fallback to add 2nd level of security to format the output in the desire format in the case that the LLM hallucinate
 
