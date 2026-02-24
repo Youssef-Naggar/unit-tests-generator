@@ -1,0 +1,5 @@
+python-dotenv
+Pygments
+langchain-core
+pydantic
+langchain-google-genai
